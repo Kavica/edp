@@ -10,7 +10,7 @@ function Dropdown(location, url, delay){
 	var JSONDataArray = [];
 	var tag;
 	var all = false;
-	var defaultTitle
+	var defaultTitle;
 
 	var dropdownWrapper;
 
@@ -21,6 +21,7 @@ function Dropdown(location, url, delay){
 	var bgColor = "white";
 	var fontColor = "#262626";
 	var borderColor = "#f2f2f2";
+	var borderRadius = '0px';
 
 	var loadOptions = [];
 	var options = [];
@@ -40,7 +41,6 @@ function Dropdown(location, url, delay){
 
 	var updatable = false;
 	var open = false;
-	
 
 	function init(){
 		insertCSS();
@@ -81,6 +81,7 @@ function Dropdown(location, url, delay){
 	this.setDataArray = function(passedDataArray){
 		// console.log(dataArray.length)
 		if(passedDataArray.length) dataArray = passedDataArray;
+		
 	}
 
 	this.setJSONData = function (passedDataArray){
@@ -105,6 +106,11 @@ function Dropdown(location, url, delay){
 
 	this.setBorderColor = function(color){
 		borderColor = color;
+		insertCSS();
+	}
+
+	this.setBorderRadius = function(radius){
+		borderRadius = radius;
 		insertCSS();
 	}
 
@@ -183,6 +189,11 @@ function Dropdown(location, url, delay){
 			exportArray.push(selectedOptions[i].split(uniqueIdentifier)[1])
 		}
 		return exportArray;
+	}
+
+	this.getSingleData = function(){
+		if(!selectedOptions.length) return null
+		return selectedOptions[0].split(uniqueIdentifier)[1]
 	}
 
 	this.getTextValue = function(id){
@@ -640,7 +651,6 @@ function Dropdown(location, url, delay){
 	function updateSelectedText(){
 		if(mode == 'single'){
 			if(selectedOptions.length == 0){
-				console.log(defaultTitle)
 				that.setTitle(defaultTitle)
 			}else{
 				that.setTitle(selectedText[0])
@@ -721,6 +731,14 @@ function Dropdown(location, url, delay){
 				optionsIDs.push(loadOptionsIDs[i]);
 			}
 		}
+		for(var i = 0; i < loadOptions.length; i++){
+			if(loadOptions[i].toLowerCase().indexOf(dropdownInput.value.toLowerCase()) != -1 && dropdownInput.value != ''){
+				if(!optionsIDs.includes(loadOptionsIDs[i])){
+					options.push(loadOptions[i]);
+					optionsIDs.push(loadOptionsIDs[i]);
+				}
+			}
+		}
 		start = 0;
 		page = 1;
 		pages = Math.floor(options.length / limit) + 1;
@@ -734,8 +752,6 @@ function Dropdown(location, url, delay){
 		for(var i = 0; i < classes.length; i++){
 			classString += uniqueIdentifier + classes[i] + " ";
 		}
-
-		classString += 'universalDropdown'
 
 
 
@@ -778,19 +794,19 @@ function Dropdown(location, url, delay){
 					"border-style: solid;"+
 					"border-width: 1px;"+
 					"border-color:" + borderColor +";"+
-					"border-radius: 5px;"+
+					"border-radius:" + borderRadius +";"+
 				"}"+
 				"." + uniqueIdentifier + "noBottomBorder{"+
 					"border-style: solid;"+
 					"border-width: 1px 1px 0 1px;"+
 					"border-color:" + borderColor +";"+
-					"border-radius: 5px;"+
+					"border-radius:" + borderRadius +";"+
 				"}"+
 				"." + uniqueIdentifier + "topBorder{"+
 					"border-style: solid;"+
 					"border-width: 1px 0 0 0;"+
 					"border-color:" + borderColor +";"+
-					"border-radius: 5px;"+
+					"border-radius:" + borderRadius +";"+
 				"}"+
 				"." + uniqueIdentifier + "bottomBorder{"+
 					"border-style: solid;"+
@@ -801,7 +817,7 @@ function Dropdown(location, url, delay){
 					"width: 100%;"+
 					"height: 30px;"+
 					"cursor: pointer;"+
-					"border-radius: 5px;"+
+					"border-radius:" + borderRadius +";"+
 				"}"+
 				"." + uniqueIdentifier + "dropdownTitle{"+
 					"width: calc(100% - 30px);"+
